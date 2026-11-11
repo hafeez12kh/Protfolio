@@ -61,23 +61,43 @@ export default function ProjectCard({ project, index, total }) {
       )}
 
       <div className="mt-auto pt-6 flex items-center gap-3">
-        <a
-          href={project.githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline-link inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:text-accent transition-colors"
-          aria-label={`View ${project.name} on GitHub`}
-        >
-          GitHub ↗
-        </a>
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-md border border-line-strong bg-paper px-3.5 py-2 text-xs font-semibold text-ink shadow-card transition-all hover:border-accent hover:text-accent hover:-translate-y-0.5"
+            aria-label={`View ${project.name} on GitHub`}
+          >
+            GitHub
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path
+                d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+        )}
         {project.demoUrl && (
           <a
             href={project.demoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline-link inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:text-accent transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-md border border-line-strong bg-paper px-3.5 py-2 text-xs font-semibold text-ink shadow-card transition-all hover:border-accent hover:text-accent hover:-translate-y-0.5"
           >
-            Live demo ↗
+            Live demo
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path
+                d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </a>
         )}
       </div>

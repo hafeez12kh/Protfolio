@@ -24,7 +24,7 @@ export default function Projects() {
             index="03"
             eyebrow="selected work"
             title="A few things I've built"
-            description="Backend systems built around REST APIs, authentication, and database-driven architecture."
+            description="Web applications and backend systems built around REST APIs, authentication, and database-driven architecture."
           />
 
           <Reveal delay={100} className="hidden sm:flex items-center gap-2">

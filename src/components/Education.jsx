@@ -9,7 +9,7 @@ export default function Education() {
       <Container>
         <SectionHeading index="05" eyebrow="education" title="Education" />
 
-        <div className="mt-10 grid sm:grid-cols-2 gap-6">
+        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {education.map((item, index) => (
             <Reveal key={item.id} delay={index * 100}>
               <div className="h-full rounded-xl border border-line bg-paper p-6 shadow-card">

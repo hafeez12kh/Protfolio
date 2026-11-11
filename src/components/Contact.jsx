@@ -29,17 +29,10 @@ const CONTACT_LINKS = [
 
 const initialForm = { name: '', email: '', message: '' }
 
-// FormSubmit.co delivers this form straight to Hafeez's inbox — no
-// backend or account signup required. IMPORTANT ONE-TIME STEP: the very
-// first message sent through this form triggers a confirmation email
-// from FormSubmit to hafeez12kh@gmail.com. Once that's clicked, every
-// message after that arrives directly, automatically, with no extra
-// step for the visitor.
-const FORM_ENDPOINT = `https://formsubmit.co/ajax/${profile.email}`
-
 export default function Contact() {
   const [form, setForm] = useState(initialForm)
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -48,28 +41,48 @@ export default function Contact() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
+    const endpoint = import.meta.env.VITE_FORMSPREE_URL
+    if (!endpoint) {
+      setStatus('error')
+      setErrorMessage(
+        `Contact form endpoint is not configured. Please set VITE_FORMSPREE_URL or reach out directly at ${profile.email}.`
+      )
+      return
+    }
+
     setStatus('sending')
+    setErrorMessage('')
 
     try {
-      const response = await fetch(FORM_ENDPOINT, {
+      const response = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: JSON.stringify({
           name: form.name,
           email: form.email,
           message: form.message,
-          _subject: `Portfolio message from ${form.name || 'a visitor'}`,
-          _captcha: 'false',
-          _template: 'table',
         }),
       })
 
-      if (!response.ok) throw new Error('Request failed')
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        const errorText =
+          data?.errors?.map((err) => err.message).join(', ') ||
+          'Failed to send message. Please try again or email directly.'
+        throw new Error(errorText)
+      }
 
       setStatus('sent')
       setForm(initialForm)
-    } catch {
+    } catch (err) {
       setStatus('error')
+      setErrorMessage(
+        err.message || `Something went wrong. You can also email me directly at ${profile.email}.`
+      )
     }
   }
 
@@ -80,7 +93,7 @@ export default function Contact() {
           index="06"
           eyebrow="contact"
           title="Let's build something reliable"
-          description="Open to backend development roles and opportunities — feel free to reach out."
+          description="Open to software development roles and opportunities — feel free to reach out."
         />
 
         <div className="mt-10 grid lg:grid-cols-[0.8fr_1fr] gap-8">
@@ -167,13 +180,22 @@ export default function Contact() {
                   {status === 'sending' ? 'Sending…' : 'Send Message'}
                 </button>
 
-                <p role="status" className="text-xs text-ink-muted">
+                <p
+                  role="status"
+                  className={`text-xs ${
+                    status === 'error'
+                      ? 'text-red-600'
+                      : status === 'sent'
+                        ? 'text-emerald-700 font-medium'
+                        : 'text-ink-muted'
+                  }`}
+                >
                   {status === 'sent' &&
-                    'Sent — your message is on its way to my inbox. Thanks for reaching out!'}
+                    'Sent — your message has been sent successfully. Thanks for reaching out!'}
                   {status === 'error' &&
-                    `Something went wrong. You can also email me directly at ${profile.email}.`}
-                  {status === 'idle' &&
-                    'Delivered straight to my inbox — no extra step needed on your end.'}
+                    (errorMessage ||
+                      `Something went wrong. You can also email me directly at ${profile.email}.`)}
+                  {status === 'idle' && 'Delivered straight to my inbox via Formspree.'}
                   {status === 'sending' && 'Sending your message…'}
                 </p>
               </div>

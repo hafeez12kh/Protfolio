@@ -36,7 +36,9 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-shadow duration-300 ${
-        isScrolled ? 'bg-paper/90 backdrop-blur border-b border-line shadow-sm' : 'bg-paper/80 backdrop-blur border-b border-transparent'
+        isScrolled
+          ? 'bg-paper/90 backdrop-blur border-b border-line shadow-sm'
+          : 'bg-paper/80 backdrop-blur border-b border-transparent'
       }`}
     >
       <Container className="flex items-center justify-between h-16 px-6 sm:px-8 lg:px-10">
@@ -47,7 +49,7 @@ export default function Navbar() {
           {profile.name}
         </a>
 
-        <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
+        <nav className="hidden md:flex items-center gap-7" aria-label="Primary">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
@@ -57,14 +59,40 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-ink-soft hover:text-accent transition-colors"
+          >
+            GitHub ↗
+          </a>
         </nav>
 
-        <a
-          href="#contact"
-          className="hidden md:inline-flex items-center gap-1 rounded-md border border-line-strong bg-paper-raised px-4 py-2 text-sm font-semibold text-ink shadow-card transition-all hover:border-accent hover:text-accent hover:-translate-y-0.5"
-        >
-          Let&rsquo;s talk ↗
-        </a>
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href={profile.resumeUrl}
+            download
+            className="inline-flex items-center gap-1.5 rounded-md border border-line-strong bg-paper-raised px-3.5 py-2 text-sm font-semibold text-ink shadow-card transition-all hover:border-accent hover:text-accent hover:-translate-y-0.5"
+          >
+            Download Resume
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path
+                d="M7 1.5V9.5M7 9.5L3.5 6M7 9.5L10.5 6M2 12.5H12"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-1 rounded-md bg-ink px-3.5 py-2 text-sm font-semibold text-paper-raised shadow-card transition-all hover:bg-accent-dark hover:-translate-y-0.5"
+          >
+            Let&rsquo;s talk ↗
+          </a>
+        </div>
 
         <button
           type="button"
@@ -111,6 +139,23 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleLinkClick}
+            className="rounded-md px-3 py-3 text-base font-medium text-ink-soft hover:bg-paper-sunken hover:text-accent transition-colors"
+          >
+            GitHub ↗
+          </a>
+          <a
+            href={profile.resumeUrl}
+            download
+            onClick={handleLinkClick}
+            className="rounded-md px-3 py-3 text-base font-medium text-ink-soft hover:bg-paper-sunken hover:text-accent transition-colors"
+          >
+            Download Resume
+          </a>
           <a
             href="#contact"
             onClick={handleLinkClick}
